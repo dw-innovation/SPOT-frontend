@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@jlandrum/tokml": "0.6.1-ts2",
+    "@protomaps/basemaps": "5.7.2",
     "@radix-ui/react-alert-dialog": "^1.1.23",
     "@radix-ui/react-checkbox": "^1.3.11",
     "@radix-ui/react-dialog": "^1.1.23",
@@ -45,6 +46,7 @@
     "next": "16.3.5",
     "next-auth": "^4.24.15",
     "nextjs-basic-auth-middleware": "^3.1.1",
+    "pmtiles": "4.5.0",
     "react": "^19.3.0",
     "react-ace": "^14.1.0",
     "react-dom": "^19.3.0",
