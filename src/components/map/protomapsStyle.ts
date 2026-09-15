@@ -1,5 +1,5 @@
 import { layers, namedFlavor } from "@protomaps/basemaps";
-import { addProtocol, type StyleSpecification } from "maplibre-gl";
+import { addProtocol, setWorkerUrl, type StyleSpecification } from "maplibre-gl";
 import { Protocol } from "pmtiles";
 
 const PMTILES_URL = process.env.NEXT_PUBLIC_PMTILES_URL ?? "";
@@ -8,9 +8,12 @@ const LANG = process.env.NEXT_PUBLIC_PROTOMAPS_LANG ?? "en";
 
 let protocolRegistered = false;
 
-// maplibre needs the pmtiles:// protocol registered once before any style using it is loaded
+// maplibre needs the pmtiles:// protocol registered once before any style using it is loaded.
+// The worker URL must be set explicitly: maplibre's ESM build derives it from import.meta.url,
+// which is not an http(s) URL under Next's bundler (see scripts/copy-maplibre-worker.mjs).
 export const registerPmtilesProtocol = () => {
   if (protocolRegistered) return;
+  setWorkerUrl("/maplibre/maplibre-gl-worker.mjs");
   addProtocol("pmtiles", new Protocol().tile);
   protocolRegistered = true;
 };

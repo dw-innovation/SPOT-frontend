@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "copy-maplibre-worker": "node scripts/copy-maplibre-worker.mjs",
+    "predev": "pnpm copy-maplibre-worker",
+    "prebuild": "pnpm copy-maplibre-worker"
   },
   "dependencies": {
     "@jlandrum/tokml": "0.6.1-ts2",
