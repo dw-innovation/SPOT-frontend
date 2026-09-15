@@ -1,0 +1,8 @@
+allowBuilds:
+  bcrypt: true
+  sharp: true
+  maplibre-gl: true
+  unrs-resolver: true
+overrides:
+  maplibre-gl: ^6.4.1
+  "@maplibre/maplibre-gl-leaflet": ^0.1.4

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2017",
     "lib": [
       "dom",
       "dom.iterable",
@@ -18,28 +18,27 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
-    "baseUrl": ".",
     "paths": {
       "@/types/*": [
-        "src/types/*"
+        "./src/types/*"
       ],
       "@/assets/*": [
-        "src/assets/*"
+        "./src/assets/*"
       ],
       "@/stores/*": [
-        "src/stores/*"
+        "./src/stores/*"
       ],
       "@/lib/*": [
-        "src/lib/*"
+        "./src/lib/*"
       ],
       "@/hooks/*": [
-        "src/lib/hooks/*"
+        "./src/lib/hooks/*"
       ],
       "@/styles/*": [
-        "src/styles/*"
+        "./src/styles/*"
       ],
       "@/components/*": [
-        "src/components/*"
+        "./src/components/*"
       ]
     },
     "plugins": [
