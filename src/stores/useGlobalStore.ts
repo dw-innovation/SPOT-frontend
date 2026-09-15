@@ -2,6 +2,7 @@ import { create } from "zustand";
 
 import { trackError } from "@/lib/apiServices";
 import { saveSessionStores } from "@/lib/hooks/useSaveSession";
+import useSpotQueryStore from "@/stores/useSpotQueryStore";
 import GlobalStoreInterface, {
   Dialog,
   Step,
@@ -49,6 +50,9 @@ const setDialogData = (dialogs: Dialog[], name: string, data: any): Dialog[] =>
   dialogs.map((dialog) =>
     dialog.name === name ? { ...dialog, data } : dialog
   );
+
+// Expected product outcomes, not failures — kept apart from real errors in analytics.
+const INFO_ERROR_TYPES = ["noResults"];
 
 const STEPS = [
   "naturalLanguageInput",
@@ -117,10 +121,19 @@ const useGlobalStore = create<GlobalStoreInterface>((set) => ({
     set((state) => ({ dialogs: setDialogData(state.dialogs, name, data) })),
   isError: false,
   errorType: "",
-  setError: async (type) => {
+  setError: async (type, details) => {
     set({ isError: true, errorType: type });
-    const sessionLink = await saveSessionStores();
-    await trackError(type, sessionLink);
+    const { naturalLanguageSentence, spotQuery } = useSpotQueryStore.getState();
+    const sessionLink = await saveSessionStores().catch(() => undefined);
+    await trackError({
+      errorType: type,
+      severity: INFO_ERROR_TYPES.includes(type) ? "info" : "error",
+      message: details?.message,
+      stack: details?.stack,
+      sessionLink,
+      prompt: naturalLanguageSentence,
+      spotQuery,
+    });
   },
   clearError: () => set({ isError: false, errorType: "" }),
   youTubeConsent: false,

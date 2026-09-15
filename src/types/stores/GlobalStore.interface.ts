@@ -28,7 +28,10 @@ export default interface GlobalStoreInterface {
   toggleDialog: (name: string, state?: boolean | undefined) => void;
   isError: boolean;
   errorType: string;
-  setError: (message: string) => void;
+  setError: (
+    type: string,
+    details?: { message?: string; stack?: string }
+  ) => Promise<void>;
   clearError: () => void;
   setDialogData: (name: string, data: any) => void;
   youTubeConsent: boolean;

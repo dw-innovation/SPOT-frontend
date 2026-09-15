@@ -75,7 +75,7 @@ const useQueryOSMData = ({
   useEffect(() => {
     if (!hasMounted.current) return;
     if (isError && error) {
-      setError(error.message || "");
+      setError(error.message || "", { stack: error.stack });
       toggleDialog("stepperError", true);
 
       if (onErrorCallbacks) {

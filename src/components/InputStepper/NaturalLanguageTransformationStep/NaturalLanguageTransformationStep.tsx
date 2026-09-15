@@ -53,7 +53,9 @@ const NaturalLanguageTransformationStep = () => {
           nextStep();
         })
         .catch((validationError) => {
-          setErrorType(validationError.message);
+          setErrorType(validationError.message, {
+            stack: validationError.stack,
+          });
           toggleDialog("inputStepper", false);
           toggleDialog("error");
         });
@@ -71,8 +73,8 @@ const NaturalLanguageTransformationStep = () => {
   useEffect(() => {
     if (isError && error) {
       if (typeof error === "object" && error !== null && "message" in error) {
-        const err = error as { message: string };
-        setErrorType(err.message);
+        const err = error as { message: string; stack?: string };
+        setErrorType(err.message, { stack: err.stack });
       } else {
         setErrorType("An unexpected error occurred");
       }

@@ -1,21 +1,9 @@
-import { Db, MongoClient } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import shortUUID from "short-uuid";
 
 import { authOptions } from "@/lib/auth";
-
-let cachedDb: Db;
-
-// Function to connect to MongoDB, reusing a cached connection if available
-async function connectToDatabase(): Promise<Db> {
-  if (cachedDb) return cachedDb;
-
-  const client = await MongoClient.connect(process.env.MONGODB_URI || "");
-  const db = client.db(process.env.MONGODB_DBNAME);
-  cachedDb = db;
-  return db;
-}
+import { connectToDatabase } from "@/lib/db";
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);

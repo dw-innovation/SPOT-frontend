@@ -1,3 +1,4 @@
+import { ClientErrorPayload } from "@/types/errorReport";
 import { SpotQuery } from "@/types/spotQuery";
 
 export const fetchOSMData = async ({
@@ -157,11 +158,23 @@ export const fetchTagInfo = async (key: string) => {
   return response.json();
 };
 
-export const trackError = async (errorType: string, sessionLink: string) => {
-  const response = await fetch("/api/trackError", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ params: { errorType, sessionLink } }),
-  });
-  return response.json();
+export const trackError = async (
+  payload: ClientErrorPayload
+): Promise<{ status: string; id?: string } | undefined> => {
+  try {
+    const response = await fetch("/api/trackError", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        route: typeof window !== "undefined" ? window.location.pathname : undefined,
+        ...payload,
+      }),
+      keepalive: true,
+    });
+    return response.json();
+  } catch (e) {
+    // Reporting must never throw into the UI.
+    console.error("trackError failed:", e);
+    return undefined;
+  }
 };
