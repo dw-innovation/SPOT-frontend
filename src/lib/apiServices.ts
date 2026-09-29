@@ -1,4 +1,6 @@
 import { ClientErrorPayload } from "@/types/errorReport";
+import { MapTilerFeature } from "@/types/maptiler";
+import { NominatimArea, NominatimPlace } from "@/types/nominatim";
 import { SpotQuery } from "@/types/spotQuery";
 
 export const fetchOSMData = async ({
@@ -18,8 +20,10 @@ export const fetchOSMData = async ({
   return response.json();
 };
 
-export const fetchGeocodeApiData = async (address: string): Promise<any> => {
-  if (!address) return;
+export const fetchGeocodeApiData = async (
+  address: string
+): Promise<MapTilerFeature[] | null> => {
+  if (!address) return null;
 
   try {
     const response = await fetch(
@@ -66,7 +70,7 @@ export const validateSpotQuery = async (spotQuery: SpotQuery): Promise<any> => {
   return response.json();
 };
 
-export const fetchAreas = async (area: string): Promise<any> => {
+export const fetchAreas = async (area: string): Promise<NominatimArea[]> => {
   const params = new URLSearchParams({
     q: area,
     format: "json",
@@ -82,7 +86,11 @@ export const fetchAreas = async (area: string): Promise<any> => {
   }
 
   const data = await response.json();
-  return data.filter((item: any) => item.geojson.type !== "Point");
+  // Nominatim returns points and lines too; only areas can become a search area.
+  return (data as NominatimPlace[]).filter(
+    (item): item is NominatimArea =>
+      item.geojson?.type === "Polygon" || item.geojson?.type === "MultiPolygon"
+  );
 };
 
 export const getSession = async (id: string) => {

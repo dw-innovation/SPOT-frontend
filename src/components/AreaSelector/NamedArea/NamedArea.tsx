@@ -8,7 +8,7 @@ import { calculateSurface, trackAction } from "@/lib/utils";
 import useGlobalStore from "@/stores/useGlobalStore";
 import useMapStore from "@/stores/useMapStore";
 import useSpotQueryStore from "@/stores/useSpotQueryStore";
-import { NominatimPlace } from "@/types/nominatim";
+import { NominatimArea } from "@/types/nominatim";
 
 import SurfaceAlert from "../SurfaceAlert";
 
@@ -36,7 +36,7 @@ const NamedArea = () => {
     data: suggestedAreas,
     isFetching,
     isError,
-  } = useQuery<NominatimPlace[]>({
+  } = useQuery<NominatimArea[]>({
     queryKey,
     queryFn: () => fetchAreas(areaName),
     enabled: !!areaName && areaType !== "bbox",

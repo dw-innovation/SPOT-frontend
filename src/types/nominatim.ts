@@ -1,4 +1,4 @@
-import type { MultiPolygon, Polygon } from "geojson";
+import type { Geometry, MultiPolygon, Polygon } from "geojson";
 
 export interface NominatimPlace {
   place_id: number;
@@ -15,5 +15,14 @@ export interface NominatimPlace {
   name: string;
   display_name: string;
   boundingbox: string[];
-  geojson: Polygon | MultiPolygon;
+  /** Nominatim also returns Point and LineString results, not only areas. */
+  geojson: Geometry;
 }
+
+/**
+ * A place whose geometry is an actual area. fetchAreas() narrows to these, so
+ * the search-area geometry can be used without a cast.
+ */
+export type NominatimArea = Omit<NominatimPlace, "geojson"> & {
+  geojson: Polygon | MultiPolygon;
+};
