@@ -60,6 +60,9 @@ Copy `.env.example` to `.env.local` and fill it in, or pull the real values with
 |----------|-------------|
 | `NLP_API` | Base URL of the [Central NLP API](https://github.com/dw-innovation/kid2-spot-central-nlp-api) (sentence → IMR). |
 | `NLP_MODEL` | Model key sent to the NLP API (e.g. `llmhub`, `t5`). |
+| `SPOT_CHAT_API` | Optional base URL of the [SPOT Chat API](https://github.com/dw-innovation/kid2-spot-chat). When set, it replaces `NLP_API` for sentence → query. |
+| `SPOT_CHAT_API_KEY` | `X-API-Key` for the SPOT Chat API. |
+| `SPOT_TAG_SEARCH_URL` | Tag search used to turn the chat API's entity names into OSM filters (default `https://tags.findthatspot.io/api/search`). |
 | `OSM_API` | Base URL of the [OSM Query API](https://github.com/dw-innovation/kid2-spot-osm-query-api) (run/validate a Spot query). |
 | `ENVIRONMENT` | Runtime environment forwarded to the NLP API (`development`, `production`). |
 | `MONGODB_URI` | MongoDB connection string for saved sessions and error reports. |

@@ -33,11 +33,18 @@ export type Dialogs = {
   };
 };
 
+export type StepName =
+  | "naturalLanguageInput"
+  | "naturalLanguageTransformation"
+  | "areaSelector"
+  | "mapQuery";
+
 export default interface GlobalStoreInterface {
   currentStep: number;
   nextStep: () => void;
   /** Returns the stepper to its first step. */
   resetSteps: () => void;
+  goToStep: (name: StepName) => void;
   view: "map" | "data";
   setView: (view: "map" | "data") => void;
   showSuggestions: boolean;
