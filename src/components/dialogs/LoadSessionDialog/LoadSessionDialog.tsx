@@ -1,8 +1,8 @@
 import React from "react";
 
-import useLoadSessionState from "@/hooks/useLoadSessionState";
-import useSessionActions from "@/hooks/useSessionActions";
 import useStrings from "@/lib/contexts/useStrings";
+import useLoadSessionState from "@/lib/hooks/useLoadSessionState";
+import useSessionActions from "@/lib/hooks/useSessionActions";
 import { loadSession } from "@/lib/sessions";
 import { trackAction } from "@/lib/utils";
 
