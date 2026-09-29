@@ -4,7 +4,9 @@ import { trackError } from "@/lib/apiServices";
 import { saveSessionStores } from "@/lib/hooks/useSaveSession";
 import useSpotQueryStore from "@/stores/useSpotQueryStore";
 import GlobalStoreInterface, {
-  Dialog,
+  DIALOG_NAMES,
+  DialogName,
+  Dialogs,
   Step,
 } from "@/types/stores/GlobalStore.interface";
 
@@ -31,25 +33,13 @@ const nextStep = (
   }),
 });
 
-const toggleDialog = (
-  dialogs: Dialog[],
-  name: string,
-  isOpen: boolean | undefined = undefined
-): Dialog[] =>
-  dialogs.map((dialog) => {
-    if (dialog.name === name) {
-      return {
-        ...dialog,
-        isOpen: isOpen !== undefined ? isOpen : !dialog.isOpen,
-      };
-    }
-    return dialog;
-  });
-
-const setDialogData = (dialogs: Dialog[], name: string, data: any): Dialog[] =>
-  dialogs.map((dialog) =>
-    dialog.name === name ? { ...dialog, data } : dialog
-  );
+// Only the named entry gets a new identity, so a component selecting
+// dialogs[name].isOpen re-renders only when that dialog changes.
+const patchDialog = (
+  dialogs: Dialogs,
+  name: DialogName,
+  patch: Partial<Dialogs[DialogName]>
+): Dialogs => ({ ...dialogs, [name]: { ...dialogs[name], ...patch } });
 
 // Expected product outcomes, not failures — kept apart from real errors in analytics.
 const INFO_ERROR_TYPES = ["noResults"];
@@ -61,20 +51,20 @@ const STEPS = [
   "mapQuery",
 ];
 
-const DIALOGS = [
-  "downloadResults",
-  "saveSession",
-  "loadSession",
-  "spotQuery",
-  "error",
-  "stepperError",
-  "queryOSM",
-  "inputStepper",
-  "info",
-  "entityEditor",
-  "signIn",
-  "maintenance",
-];
+const initialDialogs = (): Dialogs => {
+  const maintenance = process.env.NEXT_PUBLIC_MAINTENANCE;
+
+  return Object.fromEntries(
+    DIALOG_NAMES.map((name) => [
+      name,
+      {
+        isOpen:
+          (maintenance === "on" && name === "maintenance") ||
+          (maintenance === "off" && name === "inputStepper"),
+      },
+    ])
+  ) as Dialogs;
+};
 
 const useGlobalStore = create<GlobalStoreInterface>((set) => ({
   currentStep: 0,
@@ -106,19 +96,15 @@ const useGlobalStore = create<GlobalStoreInterface>((set) => ({
     set((state) => ({
       isStreetViewFullscreen: isFullScreen ?? !state.isStreetViewFullscreen,
     })),
-  dialogs: DIALOGS.map((dialog) => {
-    const maintenance = process.env.NEXT_PUBLIC_MAINTENANCE;
-
-    const isOpen =
-      (maintenance === "on" && dialog === "maintenance") ||
-      (maintenance === "off" && dialog === "inputStepper");
-
-    return { name: dialog, isOpen };
-  }),
+  dialogs: initialDialogs(),
   toggleDialog: (name, isOpen) =>
-    set((state) => ({ dialogs: toggleDialog(state.dialogs, name, isOpen) })),
+    set((state) => ({
+      dialogs: patchDialog(state.dialogs, name, {
+        isOpen: isOpen ?? !state.dialogs[name].isOpen,
+      }),
+    })),
   setDialogData: (name, data) =>
-    set((state) => ({ dialogs: setDialogData(state.dialogs, name, data) })),
+    set((state) => ({ dialogs: patchDialog(state.dialogs, name, { data }) })),
   isError: false,
   errorType: "",
   setError: async (type, details) => {

@@ -78,9 +78,7 @@ const COMPONENTS = {
 
 const InfoDialog = () => {
   const dialogData =
-    useGlobalStore((state) => state.dialogs).find(
-      (dialog) => dialog.name === DIALOG_NAME
-    )?.data || "about";
+    useGlobalStore((state) => state.dialogs.info.data) || "about";
 
   const dialogDescription = STRINGS[`${dialogData}` as keyof typeof STRINGS];
   const dialogTitle = STRINGS[`${dialogData}Title` as keyof typeof STRINGS];

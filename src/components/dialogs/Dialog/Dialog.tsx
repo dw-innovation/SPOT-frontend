@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 import {
   Dialog as RadixDialog,
   DialogContent,
@@ -9,9 +7,10 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import useGlobalStore from "@/stores/useGlobalStore";
+import { DialogName } from "@/types/stores/GlobalStore.interface";
 
 type Props = {
-  dialogName: string;
+  dialogName: DialogName;
   dialogTitle?: string;
   dialogDescription?: string;
   children: React.ReactNode;
@@ -31,15 +30,8 @@ const Dialog = ({
   showCloseButton,
   preventClose,
 }: Props) => {
-  const dialogs = useGlobalStore((state) => state.dialogs);
+  const isOpen = useGlobalStore((state) => state.dialogs[dialogName].isOpen);
   const toggleDialog = useGlobalStore((state) => state.toggleDialog);
-  const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    const dialogState =
-      dialogs.find((dialog) => dialog.name === dialogName)?.isOpen || false;
-    setIsOpen(dialogState);
-  }, [dialogName, dialogs]);
 
   return (
     <RadixDialog open={isOpen} onOpenChange={() => toggleDialog(dialogName)}>
