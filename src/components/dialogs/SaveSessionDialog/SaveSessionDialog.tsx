@@ -41,7 +41,7 @@ const SaveSessionDialog = () => {
     if (sessions.find((session) => session.name === sessionName)) return;
     trackAction("session", "save", sessionName);
     try {
-      let date = new Date();
+      const date = new Date();
 
       const bounds = useMapStore.getState().bounds;
       const spotQueryState = useSpotQueryStore.getState();

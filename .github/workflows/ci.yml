@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main, staging]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm typecheck
+
+      # Warnings are tracked debt; this fails only on errors, so new
+      # problems cannot be introduced without being fixed first.
+      - run: pnpm lint
+
+      - run: pnpm build
+        env:
+          # Build-time public vars; real values live in the Vercel project.
+          NEXT_PUBLIC_PMTILES_URL: https://example.invalid/basemap.pmtiles

@@ -26,7 +26,7 @@ const ResultsOutsideAlert = () => {
   const handleFlyToBounds = () => {
     if (!geoJSON) return;
     handleCloseClick();
-    let newBBox = bbox(geoJSON);
+    const newBBox = bbox(geoJSON);
 
     setBounds([
       [newBBox[1], newBBox[0]],

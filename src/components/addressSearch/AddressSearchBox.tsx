@@ -1,5 +1,5 @@
-/* eslint-disable react/jsx-key */
-import Downshift from "downshift";
+ 
+import Downshift, { ControllerStateAndHelpers } from "downshift";
 import { debounce, DebouncedFunc } from "lodash";
 import React, { useCallback, useEffect, useRef } from "react";
 
@@ -11,6 +11,7 @@ import { checkInputType } from "@/lib/utils";
 import useAddressStore from "@/stores/useAddressStore";
 import useDisableMapInteraction from "@/stores/useDisableMapInteraction";
 import useMapStore from "@/stores/useMapStore";
+import { MapTilerFeature } from "@/types/maptiler";
 
 import AddressSuggestions from "./AddressSuggestions";
 
@@ -46,7 +47,7 @@ const AddressSearchBox = () => {
 
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
-    selectItem: (item: any) => void
+    selectItem: ControllerStateAndHelpers<MapTilerFeature>["selectItem"]
   ) => {
     if (e.key === "Enter") {
       if (checkInputType(searchAddress) === "coordinates") {
@@ -62,7 +63,7 @@ const AddressSearchBox = () => {
           setSearchAddress(searchAddress);
           setCurrentAddress({
             placeName: searchAddress,
-            coordinates: newCenter,
+            coordinates: [newCenter.lat, newCenter.lng],
           });
         }
 
@@ -80,7 +81,7 @@ const AddressSearchBox = () => {
         ]);
         setCurrentAddress({
           placeName: firstSuggestion.place_name_en,
-          coordinates: firstSuggestion.coordinates,
+          coordinates: [firstSuggestion.center[1], firstSuggestion.center[0]],
         });
         setSearchAddress(firstSuggestion.place_name_en);
         selectItem(firstSuggestion);
@@ -104,16 +105,22 @@ const AddressSearchBox = () => {
 
   return (
     <div className="flex flex-col gap-1 justify-end w-[15rem] md:w-[20rem]">
-      <Downshift
-        onChange={({ coordinates, bbox, place_name_en }) => {
+      <Downshift<MapTilerFeature>
+        onChange={(item) => {
+          if (!item) return;
+          const { center, bbox, place_name_en } = item;
           setBounds([
             [bbox[1], bbox[0]],
             [bbox[3], bbox[2]],
           ]);
 
-          setCurrentAddress({ placeName: place_name_en, coordinates });
+          setCurrentAddress({
+            placeName: place_name_en,
+            coordinates: [center[1], center[0]],
+          });
         }}
         onSelect={(item) => {
+          if (!item) return;
           setSearchAddress(item.place_name_en);
           inputRef?.current?.blur();
         }}

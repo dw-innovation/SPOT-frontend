@@ -64,7 +64,7 @@ export const addRuleOrGroup = (
   spotQuery: SpotQuery,
   nodeId: number,
   pathString: string,
-  newObject: Object
+  newObject: object
 ): SpotQuery => {
   const fullPath = `nodes[${nodeId}].${pathString}`;
   const clonedSpotQuery = _.cloneDeep(spotQuery);

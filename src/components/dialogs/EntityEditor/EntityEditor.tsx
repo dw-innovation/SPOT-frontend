@@ -14,11 +14,7 @@ import Header from "./Header";
 const DIALOG_NAME = "entityEditor";
 
 const EntityEditor = () => {
-  const dialogs = useGlobalStore((state) => state.dialogs);
-
-  const dialogData = dialogs.find(
-    (dialog) => dialog.name === DIALOG_NAME
-  )?.data;
+  const dialogData = useGlobalStore((state) => state.dialogs.entityEditor.data);
 
   const node = useSpotQueryStore(
     (state) => state.spotQuery.nodes[dialogData?.id || 0]

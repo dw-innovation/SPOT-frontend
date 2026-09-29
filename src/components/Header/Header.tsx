@@ -3,7 +3,6 @@
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { useSession } from "next-auth/react";
 
-import BetaIcon from "@/assets/icons/BetaIcon";
 import SpotLogo from "@/assets/icons/SpotLogo";
 // import SpotSelector from "@/components/SpotSelector";
 import { Button } from "@/components/ui/button";

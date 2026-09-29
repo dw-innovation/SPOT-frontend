@@ -1,19 +1,17 @@
-import { GetMenuPropsOptions, GetPropsCommonOptions } from "downshift";
+import { ControllerStateAndHelpers } from "downshift";
 import L from "leaflet";
 import React, { useEffect, useRef } from "react";
 
 import { cn } from "@/lib/utils";
+import { MapTilerFeature } from "@/types/maptiler";
 
 type Props = {
   isOpen: boolean;
-  suggestions: any[];
+  suggestions: MapTilerFeature[];
   highlightedIndex: number | null;
-  selectedItem: any;
-  getItemProps: (options: any) => any;
-  getMenuProps: (
-    options?: GetMenuPropsOptions | undefined,
-    otherOptions?: GetPropsCommonOptions | undefined
-  ) => any;
+  selectedItem: MapTilerFeature | null;
+  getItemProps: ControllerStateAndHelpers<MapTilerFeature>["getItemProps"];
+  getMenuProps: ControllerStateAndHelpers<MapTilerFeature>["getMenuProps"];
 };
 
 const AddressSuggestions = ({

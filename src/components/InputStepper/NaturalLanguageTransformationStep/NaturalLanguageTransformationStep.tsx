@@ -36,7 +36,7 @@ const NaturalLanguageTransformationStep = () => {
   useEffect(() => {
     if (isSuccess && data) {
       // if transformation was successful and returned data
-      let spotQuery = data.imr;
+      const spotQuery = data.imr;
 
       // validate SpotQuery
       validateSpotQuery(spotQuery)
