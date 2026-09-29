@@ -6,6 +6,7 @@ import {
   fetchNLToSpotQueryTransformation,
   validateSpotQuery,
 } from "@/lib/apiServices";
+import useChatStore from "@/stores/useChatStore";
 import useGlobalStore from "@/stores/useGlobalStore";
 import useMapStore from "@/stores/useMapStore";
 import useSpotQueryStore from "@/stores/useSpotQueryStore";
@@ -25,6 +26,8 @@ const NaturalLanguageTransformationStep = () => {
   const setErrorType = useGlobalStore((state) => state.setError);
   const toggleDialog = useGlobalStore((state) => state.toggleDialog);
   const bounds = useMapStore((state) => state.bounds);
+  const setChat = useChatStore((state) => state.setChat);
+  const resetChat = useChatStore((state) => state.reset);
 
   const { data, error, isSuccess, isError, isFetching } = useQuery({
     queryKey: ["transformNLToSpotQuery", naturalLanguageSentence],
@@ -42,6 +45,12 @@ const NaturalLanguageTransformationStep = () => {
       validateSpotQuery(spotQuery)
         .then(() => {
           setSpotQuery(spotQuery);
+          // Only the chat API returns a history; it starts a new chat.
+          if (data.history) {
+            setChat(data.history, data.query);
+          } else {
+            resetChat();
+          }
           if (spotQuery.area.type === "bbox") {
             setSearchAreaBBox([
               bounds[0][1],
@@ -64,6 +73,8 @@ const NaturalLanguageTransformationStep = () => {
     isSuccess,
     data,
     setSpotQuery,
+    setChat,
+    resetChat,
     bounds,
     nextStep,
     setErrorType,

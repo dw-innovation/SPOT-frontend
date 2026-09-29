@@ -7,6 +7,7 @@ import GlobalStoreInterface, {
   DIALOG_NAMES,
   DialogName,
   Dialogs,
+  StepName,
 } from "@/types/stores/GlobalStore.interface";
 
 // Only the named entry gets a new identity, so a component selecting
@@ -22,7 +23,7 @@ const INFO_ERROR_TYPES = ["noResults"];
 
 // The flow rendered by components/InputStepper; only the count and order
 // matter here, the components themselves live there.
-const STEP_NAMES = [
+const STEP_NAMES: StepName[] = [
   "naturalLanguageInput",
   "naturalLanguageTransformation",
   "areaSelector",
@@ -52,6 +53,7 @@ const useGlobalStore = create<GlobalStoreInterface>((set) => ({
       currentStep: Math.min(state.currentStep + 1, STEP_NAMES.length - 1),
     })),
   resetSteps: () => set({ currentStep: 0 }),
+  goToStep: (name) => set({ currentStep: STEP_NAMES.indexOf(name) }),
   view: "map",
   setView: (view: "map" | "data") => set({ view }),
   initialize: (initialData) =>

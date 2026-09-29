@@ -4,12 +4,12 @@ import { getServerSession } from "next-auth";
 import { anonymizeUser } from "@/lib/anonymizeUser";
 import { authOptions } from "@/lib/auth";
 import {
-  ChatQuery,
   ChatQueryConversionError,
   chatQueryToSpotQuery,
 } from "@/lib/chatQuery.server";
 import { createUpstreamRoute } from "@/lib/createUpstreamRoute";
 import { persistErrorReport } from "@/lib/errorReporting.server";
+import { ChatQuery } from "@/types/chatQuery";
 
 export const maxDuration = 60;
 
@@ -35,12 +35,13 @@ const errorResponse = (message: string, status: number) =>
   NextResponse.json({ status: "error", message }, { status });
 
 // Sends the sentence to the SPOT Chat API and converts its query into a
-// SpotQuery, returned as `imr` like the NLP API does.
+// SpotQuery, returned as `imr` like the NLP API does. Follow-up messages send
+// the previous `query` and `history` along, so the chat refines the search.
 const transformWithChatApi = async (req: NextRequest) => {
   const session = await getServerSession(authOptions);
   if (!session?.user?.name) return errorResponse("unauthenticated", 401);
 
-  const { sentence } = await req.json();
+  const { sentence, query = null, history = [] } = await req.json();
   if (typeof sentence !== "string" || !sentence.trim()) {
     return errorResponse("emptySentence", 400);
   }
@@ -65,7 +66,7 @@ const transformWithChatApi = async (req: NextRequest) => {
         "Content-Type": "application/json",
         "X-API-Key": process.env.SPOT_CHAT_API_KEY || "",
       },
-      body: JSON.stringify({ message: sentence }),
+      body: JSON.stringify({ message: sentence, query, history }),
     });
 
     if (!response.ok) {

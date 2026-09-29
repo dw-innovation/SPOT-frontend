@@ -1,6 +1,7 @@
 import pluralize from "pluralize";
 
 import { COLOUR_BUNDLES } from "@/lib/const/spotColours";
+import { ChatEntity, ChatProperty, ChatQuery } from "@/types/chatQuery";
 import { Edge, Filter, FilterNode, SpotQuery } from "@/types/spotQuery";
 
 /**
@@ -10,30 +11,6 @@ import { Edge, Filter, FilterNode, SpotQuery } from "@/types/spotQuery";
  * "cuisine = italian"). The OSM filters are looked up in SPOT's tag search,
  * the same way the Central NLP API does it in adopt_generation.py.
  */
-
-type ChatProperty = { name: string; operator?: string; value?: string };
-
-type ChatEntity = {
-  id: number;
-  name: string;
-  type?: "nwr" | "cluster";
-  properties?: ChatProperty[];
-  minPoints?: number;
-  maxDistance?: string;
-};
-
-type ChatRelation = {
-  source: number;
-  target: number;
-  type: string;
-  value?: string;
-};
-
-export type ChatQuery = {
-  area: { type: "area"; value: string } | { type: "bbox"; value?: string };
-  entities: ChatEntity[];
-  relations?: ChatRelation[];
-};
 
 type TagSearchResult = { imr: FilterNode[] };
 

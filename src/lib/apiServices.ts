@@ -1,3 +1,4 @@
+import { ChatMessage, ChatQuery, ChatTurnResponse } from "@/types/chatQuery";
 import { ClientErrorPayload } from "@/types/errorReport";
 import { MapTilerFeature } from "@/types/maptiler";
 import { NominatimArea, NominatimPlace } from "@/types/nominatim";
@@ -46,6 +47,29 @@ export const fetchNLToSpotQueryTransformation = async (
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ sentence: naturalLanguagePrompt }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || "UnknownError");
+  }
+
+  return response.json();
+};
+
+export const fetchChatTurn = async ({
+  message,
+  query,
+  history,
+}: {
+  message: string;
+  query: ChatQuery | null;
+  history: ChatMessage[];
+}): Promise<ChatTurnResponse> => {
+  const response = await fetch("/api/transformSentence", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ sentence: message, query, history }),
   });
 
   if (!response.ok) {
