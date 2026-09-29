@@ -1,30 +1,56 @@
 import { useMutation } from "@tanstack/react-query";
 import { SendHorizontalIcon } from "lucide-react";
 import React, { KeyboardEvent, useEffect, useRef, useState } from "react";
+import ReactMarkdown, { Components } from "react-markdown";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { fetchChatTurn, validateSpotQuery } from "@/lib/apiServices";
 import { mergeChatTurn, syncChatQuery } from "@/lib/chat";
-import { cn, trackAction } from "@/lib/utils";
+import { trackAction } from "@/lib/utils";
 import useChatStore from "@/stores/useChatStore";
 import useGlobalStore from "@/stores/useGlobalStore";
 import useMapStore from "@/stores/useMapStore";
 import useSpotQueryStore from "@/stores/useSpotQueryStore";
 import { ChatMessage } from "@/types/chatQuery";
 
-const Bubble = ({ message }: { message: ChatMessage }) => (
-  <div
-    className={cn(
-      "max-w-[85%] rounded-md px-2 py-1 text-sm whitespace-pre-wrap",
-      message.role === "user"
-        ? "self-end bg-primary text-primary-foreground"
-        : "self-start bg-gray-100"
-    )}
-  >
-    {message.content}
-  </div>
-);
+import SearchSummary from "./SearchSummary";
+
+// Compact styles for the Markdown in assistant replies; the panel is narrow.
+const markdownComponents: Components = {
+  p: ({ children }) => <p className="mb-1 last:mb-0">{children}</p>,
+  ul: ({ children }) => <ul className="pl-4 mb-1 list-disc">{children}</ul>,
+  ol: ({ children }) => (
+    <ol className="pl-4 mb-1 list-decimal">{children}</ol>
+  ),
+  li: ({ children }) => <li className="mb-0.5">{children}</li>,
+  strong: ({ children }) => (
+    <strong className="font-semibold">{children}</strong>
+  ),
+  code: ({ children }) => (
+    <code className="px-1 font-mono text-xs bg-gray-200 rounded">
+      {children}
+    </code>
+  ),
+  a: ({ children, href }) => (
+    <a href={href} target="_blank" rel="noreferrer" className="underline">
+      {children}
+    </a>
+  ),
+};
+
+const Bubble = ({ message }: { message: ChatMessage }) =>
+  message.role === "user" ? (
+    <div className="self-end max-w-[85%] rounded-md px-2 py-1 text-sm whitespace-pre-wrap bg-primary text-primary-foreground">
+      {message.content}
+    </div>
+  ) : (
+    <div className="self-start max-w-[85%] rounded-md px-2 py-1 text-sm bg-gray-100">
+      <ReactMarkdown components={markdownComponents}>
+        {message.content}
+      </ReactMarkdown>
+    </div>
+  );
 
 // Refines the current search in a conversation with the SPOT Chat API. The
 // first message comes from the input stepper; every later one edits the
@@ -122,6 +148,7 @@ const ChatPanel = () => {
           New search
         </Button>
       </div>
+      <SearchSummary />
       <div
         ref={listRef}
         className="flex flex-col gap-2 overflow-y-auto max-h-64"
