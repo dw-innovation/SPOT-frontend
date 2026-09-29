@@ -7,31 +7,7 @@ import GlobalStoreInterface, {
   DIALOG_NAMES,
   DialogName,
   Dialogs,
-  Step,
 } from "@/types/stores/GlobalStore.interface";
-
-const resetSteps = (steps: Step[]): Step[] =>
-  steps.map((step) => ({
-    ...step,
-    status: "open",
-    error: { isError: false, message: "" },
-  }));
-
-const prevStep = (currentStep: number): number =>
-  currentStep - 1 > 0 ? currentStep - 1 : currentStep;
-
-const nextStep = (
-  currentStep: number,
-  steps: Step[]
-): Partial<GlobalStoreInterface> => ({
-  currentStep: currentStep + 1 < steps.length ? currentStep + 1 : currentStep,
-  steps: steps.map((step, i) => {
-    if (i === currentStep) {
-      return { ...step, status: "completed" };
-    }
-    return step;
-  }),
-});
 
 // Only the named entry gets a new identity, so a component selecting
 // dialogs[name].isOpen re-renders only when that dialog changes.
@@ -44,7 +20,9 @@ const patchDialog = (
 // Expected product outcomes, not failures — kept apart from real errors in analytics.
 const INFO_ERROR_TYPES = ["noResults"];
 
-const STEPS = [
+// The flow rendered by components/InputStepper; only the count and order
+// matter here, the components themselves live there.
+const STEP_NAMES = [
   "naturalLanguageInput",
   "naturalLanguageTransformation",
   "areaSelector",
@@ -69,21 +47,11 @@ const initialDialogs = (): Dialogs => {
 const useGlobalStore = create<GlobalStoreInterface>((set) => ({
   currentStep: 0,
   showSuggestions: false,
-  steps: STEPS.map((step) => ({
-    name: step,
-    status: "open",
-    error: { isError: false },
-  })),
-  nextStep: () => set((state) => nextStep(state.currentStep, state.steps)),
-  prevStep: () =>
+  nextStep: () =>
     set((state) => ({
-      currentStep: prevStep(state.currentStep),
+      currentStep: Math.min(state.currentStep + 1, STEP_NAMES.length - 1),
     })),
-  resetSteps: () =>
-    set((state) => ({
-      currentStep: 0,
-      steps: resetSteps(state.steps),
-    })),
+  resetSteps: () => set({ currentStep: 0 }),
   view: "map",
   setView: (view: "map" | "data") => set({ view }),
   initialize: (initialData) =>

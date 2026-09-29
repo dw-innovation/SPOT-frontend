@@ -1,9 +1,3 @@
-export type Step = {
-  name: string;
-  status: "open" | "loading" | "completed" | "error";
-  error: { isError: boolean; message?: string };
-};
-
 export const DIALOG_NAMES = [
   "downloadResults",
   "saveSession",
@@ -41,9 +35,8 @@ export type Dialogs = {
 
 export default interface GlobalStoreInterface {
   currentStep: number;
-  prevStep: () => void;
   nextStep: () => void;
-  steps: Step[];
+  /** Returns the stepper to its first step. */
   resetSteps: () => void;
   view: "map" | "data";
   setView: (view: "map" | "data") => void;
