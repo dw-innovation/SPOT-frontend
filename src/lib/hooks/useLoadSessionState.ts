@@ -17,7 +17,7 @@ const useLoadSessionState = () => {
 
   useEffect(() => {
     if (!Array.isArray(sessions)) return;
-    let availableOptions = sessions.map((session) => ({
+    const availableOptions = sessions.map((session) => ({
       value: session.id,
       label: session.name,
     }));

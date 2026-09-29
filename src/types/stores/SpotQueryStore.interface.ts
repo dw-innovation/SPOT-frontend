@@ -11,7 +11,7 @@ export default interface SpotQueryStoreInterface {
   addRuleOrGroup: (
     nodeId: number,
     pathString: string,
-    newObject: Object
+    newObject: object
   ) => void;
   switchOperatorAtPath: (nodeId: number, pathString: string) => void;
   stringifiedSpotQuery: string;

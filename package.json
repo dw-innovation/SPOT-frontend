@@ -2,14 +2,20 @@
   "name": "kid2-spot-frontend",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@10.34.5",
+  "engines": {
+    "node": ">=22.21.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "copy-maplibre-worker": "node scripts/copy-maplibre-worker.mjs",
     "predev": "pnpm copy-maplibre-worker",
-    "prebuild": "pnpm copy-maplibre-worker"
+    "prebuild": "pnpm copy-maplibre-worker",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@jlandrum/tokml": "0.6.1-ts2",
@@ -35,7 +41,6 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "downshift": "^9.4.0",
-    "eslint": "10.4.1",
     "eslint-config-next": "^16.3.5",
     "gray-matter": "^4.0.3",
     "immer": "^11.1.18",
@@ -90,12 +95,12 @@
     "@typescript-eslint/eslint-plugin": "^8.70.0",
     "@typescript-eslint/parser": "^8.70.0",
     "autoprefixer": "^10.6.0",
+    "eslint": "9.39.5",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-simple-import-sort": "^13.0.0",
     "eslint-plugin-unused-imports": "^4.4.1",
     "postcss": "^8.5.28",
     "prop-types": "^15.8.1",
     "tailwindcss": "^4.3.3"
-  },
-  "packageManager": "pnpm@10.34.5"
+  }
 }

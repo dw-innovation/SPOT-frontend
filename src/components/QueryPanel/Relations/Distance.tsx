@@ -30,7 +30,7 @@ const Distance = ({ edge, index }: Props) => {
 
   const handleValueChange = useCallback(
     (index: number, value: number[], source: string, target: string) => {
-      let newValue = `${expSlider(value[0], 10, 2000, 0.8)}m`;
+      const newValue = `${expSlider(value[0], 10, 2000, 0.8)}m`;
       setRelationValue(index, "value", newValue);
 
       debouncedTrackAction(

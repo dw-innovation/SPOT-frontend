@@ -132,7 +132,7 @@ export const getOSMValueOptions = async (key: string) => {
 
   const initialData = await fetchOSMValues(key, 1, resultsPerPage);
 
-  let options = initialData.data.map((option: any) => ({
+  const options = initialData.data.map((option: any) => ({
     label: option.value,
     value: option.value,
   }));

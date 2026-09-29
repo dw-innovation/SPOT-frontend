@@ -24,7 +24,7 @@ const PolygonOutsideAlert = () => {
   const handleFlyToBounds = () => {
     trackAction("map", "flyToResults");
 
-    let newBBox = bbox({
+    const newBBox = bbox({
       type: "Polygon",
       coordinates: [customSearchArea],
     });

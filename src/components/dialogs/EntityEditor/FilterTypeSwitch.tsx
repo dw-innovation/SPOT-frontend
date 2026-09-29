@@ -19,11 +19,11 @@ const FilterTypeSwitch = ({ filter, path, nodeId, pathString }: Props) => {
 
   const updatePathString = (path: number[], currentPathString: string) => {
     if (isLogicFilter(filter)) {
-      let keys = Object.keys(filter);
-      let newPath = `${currentPathString}[${path.at(-1)}].${keys[0]}`;
+      const keys = Object.keys(filter);
+      const newPath = `${currentPathString}[${path.at(-1)}].${keys[0]}`;
       return newPath;
     } else {
-      let newPath = `${currentPathString}[${path.at(-1)}]`;
+      const newPath = `${currentPathString}[${path.at(-1)}]`;
       return newPath;
     }
   };

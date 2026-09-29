@@ -154,8 +154,8 @@ export const onEachFeature = (
 };
 
 const bindPopupToLayer = (feature: GeoJSON.Feature, layer: L.Layer) => {
-  let popupContainer = document.createElement("div");
-  let root = createRoot(popupContainer);
+  const popupContainer = document.createElement("div");
+  const root = createRoot(popupContainer);
 
   layer.bindPopup(popupContainer, { maxWidth: 400 });
 

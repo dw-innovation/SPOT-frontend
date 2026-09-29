@@ -24,7 +24,7 @@ export const cn = (...inputs: ClassValue[]) => {
 
 export const saveResultsToFile = (format: "geojson" | "kml") => {
   let fileData = "";
-  let geojson = useResultsStore.getState().geoJSON;
+  const geojson = useResultsStore.getState().geoJSON;
 
   if (!geojson) return;
 
@@ -33,7 +33,7 @@ export const saveResultsToFile = (format: "geojson" | "kml") => {
   if (format === "geojson") {
     fileData = JSON.stringify(cleanedGeoJSON);
   } else {
-    let kml = tokml(cleanedGeoJSON);
+    const kml = tokml(cleanedGeoJSON);
     fileData = kml;
   }
   const blob = new Blob([fileData], { type: "text/plain" });
@@ -270,7 +270,7 @@ export const trackAction = async (
   const trackingEnabled = usePersistedStore.getState().trackingEnabled;
   if (!trackingEnabled) return;
 
-  let params: MatomoParams = {
+  const params: MatomoParams = {
     idsite: process.env.NEXT_PUBLIC_MATOMO_SITE_ID,
     rec: 1,
     url: process.env.NEXT_PUBLIC_SITE_URL || "",

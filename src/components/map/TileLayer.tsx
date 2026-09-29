@@ -1,6 +1,7 @@
 import React from "react";
 import { TileLayer as LeafletTileLayer } from "react-leaflet";
 import VectorTileLayer from "react-leaflet-vector-tile-layer";
+
 import { getProtomapsStyle, registerPmtilesProtocol } from "./protomapsStyle";
 
 type Props = {

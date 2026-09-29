@@ -34,7 +34,7 @@ const SpotSelector = () => {
 
   useEffect(() => {
     setActiveSpot(undefined);
-    let availableOptions = spots
+    const availableOptions = spots
       .map((spot: Spot, index: number) =>
         spot.id
           ? {

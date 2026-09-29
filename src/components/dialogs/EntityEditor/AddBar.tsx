@@ -18,7 +18,7 @@ const AddBar = ({ nodeId, pathString, path }: Props) => {
   const handleAddRuleOrGroup = (
     nodeId: number,
     pathString: string,
-    newObject: Object
+    newObject: object
   ) => {
     addRuleOrGroup(nodeId, pathString, newObject);
   };

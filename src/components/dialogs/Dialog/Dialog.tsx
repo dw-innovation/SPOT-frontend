@@ -36,7 +36,7 @@ const Dialog = ({
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    let dialogState =
+    const dialogState =
       dialogs.find((dialog) => dialog.name === dialogName)?.isOpen || false;
     setIsOpen(dialogState);
   }, [dialogName, dialogs]);

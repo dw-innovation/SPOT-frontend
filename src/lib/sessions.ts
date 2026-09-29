@@ -54,9 +54,9 @@ export const saveSession = async (
 };
 
 export const loadSession = async (sessionData: Record<string, any>) => {
-  let toggleDialog = useGlobalStore.getState().toggleDialog;
+  const toggleDialog = useGlobalStore.getState().toggleDialog;
 
-  let stores = {
+  const stores = {
     useMapStore: useMapStore.getState().initialize,
     useStreetViewStore: useStreetViewStore.getState().initialize,
     useSpotQueryStore: useSpotQueryStore.getState().initialize,
