@@ -33,14 +33,14 @@ pnpm lint       # eslint . (use lint:fix to autofix)
 
 ### Known lint debt
 
-`pnpm lint` is green: it reports **0 errors** and ~99 warnings. The warnings are
+`pnpm lint` is green: it reports **0 errors** and ~95 warnings. The warnings are
 pre-existing issues that were invisible while linting was broken, kept visible
 rather than silenced so CI can fail on *new* problems. Worth working off:
 
 | Count | Rule | Note |
 | ----: | ---- | ---- |
-| 42 | `@typescript-eslint/no-explicit-any` | mostly store interfaces and API payload types |
-| 21 | `react-hooks/*` (`set-state-in-effect`, `refs`, `purity`, `use-memo`, `immutability`) | correctness rules from the React Compiler ruleset; some may be real re-render bugs |
+| 39 | `@typescript-eslint/no-explicit-any` | mostly store interfaces and API payload types |
+| 20 | `react-hooks/*` (`set-state-in-effect`, `refs`, `purity`, `use-memo`, `immutability`) | correctness rules from the React Compiler ruleset; some may be real re-render bugs |
 | 15 | `@typescript-eslint/no-unused-vars` | |
 | 12 | `react-hooks/exhaustive-deps` | |
 
