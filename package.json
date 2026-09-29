@@ -15,7 +15,7 @@
     "predev": "pnpm copy-maplibre-worker",
     "prebuild": "pnpm copy-maplibre-worker",
     "lint:fix": "eslint . --fix",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {
     "@jlandrum/tokml": "0.6.1-ts2",

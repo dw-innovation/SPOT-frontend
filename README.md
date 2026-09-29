@@ -24,7 +24,7 @@ pnpm install
 ```bash
 pnpm dev        # start the dev server
 pnpm build      # production build
-pnpm typecheck  # tsc --noEmit
+pnpm typecheck  # next typegen + tsc --noEmit
 pnpm lint       # eslint . (use lint:fix to autofix)
 ```
 
