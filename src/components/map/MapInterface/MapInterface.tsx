@@ -16,7 +16,11 @@ const MapInterface = () => (
       <QueryPanel />
     </div>
 
-    <div className="absolute top-0 left-0 z-[400] flex items-center justify-center w-full p-2">
+    {/* Centred on its own rather than inside a w-full flex row: that row was
+        an invisible bar across the whole top of the map, and since it comes
+        after the query panel at the same z-index it swallowed every click in
+        that band — including the panel's "New search" button. */}
+    <div className="absolute top-0 left-1/2 -translate-x-1/2 z-[400] p-2">
       <SearchCurrentViewButton />
     </div>
 
