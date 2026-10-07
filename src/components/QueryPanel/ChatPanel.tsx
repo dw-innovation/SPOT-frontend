@@ -3,6 +3,7 @@ import { SendHorizontalIcon } from "lucide-react";
 import React, { KeyboardEvent, useEffect, useRef, useState } from "react";
 import ReactMarkdown, { Components } from "react-markdown";
 
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { fetchChatTurn, validateSpotQuery } from "@/lib/apiServices";
@@ -159,8 +160,12 @@ const ChatPanel = () => {
         {isPending && variables && (
           <>
             <Bubble message={{ role: "user", content: variables.message }} />
-            <div className="self-start px-2 py-1 text-sm text-gray-500 bg-gray-100 rounded-md animate-pulse">
-              …
+            <div
+              role="status"
+              aria-label="Working on your request"
+              className="self-start px-2 py-1.5 text-gray-500 bg-gray-100 rounded-md"
+            >
+              <LoadingSpinner size="1rem" />
             </div>
           </>
         )}
