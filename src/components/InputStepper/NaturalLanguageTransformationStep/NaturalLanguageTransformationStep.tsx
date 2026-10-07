@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useEffect } from "react";
 
-import LoadingSpinner from "@/components/LoadingSpinner";
 import {
   fetchNLToSpotQueryTransformation,
   validateSpotQuery,
@@ -11,8 +10,7 @@ import useGlobalStore from "@/stores/useGlobalStore";
 import useMapStore from "@/stores/useMapStore";
 import useSpotQueryStore from "@/stores/useSpotQueryStore";
 
-import AnalyzeAnimation from "../Animation";
-import InputContainer from "../InputContainer";
+import StepStatus from "../StepStatus";
 
 const NaturalLanguageTransformationStep = () => {
   const nextStep = useGlobalStore((state) => state.nextStep);
@@ -25,6 +23,7 @@ const NaturalLanguageTransformationStep = () => {
   );
   const setErrorType = useGlobalStore((state) => state.setError);
   const toggleDialog = useGlobalStore((state) => state.toggleDialog);
+  const setSearchActive = useGlobalStore((state) => state.setSearchActive);
   const bounds = useMapStore((state) => state.bounds);
   const setChat = useChatStore((state) => state.setChat);
   const resetChat = useChatStore((state) => state.reset);
@@ -65,7 +64,7 @@ const NaturalLanguageTransformationStep = () => {
           setErrorType(validationError.message, {
             stack: validationError.stack,
           });
-          toggleDialog("inputStepper", false);
+          setSearchActive(false);
           toggleDialog("error");
         });
     }
@@ -79,6 +78,7 @@ const NaturalLanguageTransformationStep = () => {
     nextStep,
     setErrorType,
     toggleDialog,
+    setSearchActive,
   ]);
 
   useEffect(() => {
@@ -90,25 +90,14 @@ const NaturalLanguageTransformationStep = () => {
         setErrorType("An unexpected error occurred");
       }
 
-      toggleDialog("inputStepper", false);
+      setSearchActive(false);
       toggleDialog("error");
     }
-  }, [isError, error, setErrorType, toggleDialog]);
+  }, [isError, error, setErrorType, toggleDialog, setSearchActive]);
 
-  return (
-    <InputContainer shouldUnmount={isSuccess} title="Analyzing your input">
-      <AnalyzeAnimation
-        sentences={[
-          "Identifying the area in your query",
-          "Determining all objects in your prompt",
-          "Analyzing the connections between the objects",
-          "Hang on, we're almost there!",
-        ]}
-        duration={2500}
-      />
-      {isFetching && <LoadingSpinner size="2.5rem" />}
-    </InputContainer>
-  );
+  if (!isFetching) return null;
+
+  return <StepStatus label="Analyzing your search…" />;
 };
 
 export default NaturalLanguageTransformationStep;

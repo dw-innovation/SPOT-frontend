@@ -35,6 +35,7 @@ const NaturalLanguageInputStep = ({ minimal }: Props) => {
     (state) => state.naturalLanguageSentence
   );
   const toggleDialog = useGlobalStore((state) => state.toggleDialog);
+  const setSearchActive = useGlobalStore((state) => state.setSearchActive);
 
   const handleSearchTrigger = () => {
     if (naturalLanguageSentence === "") return;
@@ -42,6 +43,9 @@ const NaturalLanguageInputStep = ({ minimal }: Props) => {
     setShouldUnmount(true);
     setTimeout(() => {
       nextStep();
+      setSearchActive(true);
+      // The remaining steps run inline in the query panel.
+      toggleDialog("inputStepper", false);
     }, 200);
   };
 

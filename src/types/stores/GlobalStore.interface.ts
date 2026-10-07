@@ -45,6 +45,13 @@ export default interface GlobalStoreInterface {
   /** Returns the stepper to its first step. */
   resetSteps: () => void;
   goToStep: (name: StepName) => void;
+  /**
+   * Whether a search is currently running its steps. The steps render inline
+   * in the query panel, so this replaces the inputStepper dialog's open state
+   * as the signal that the flow is in progress.
+   */
+  searchActive: boolean;
+  setSearchActive: (active: boolean) => void;
   view: "map" | "data";
   setView: (view: "map" | "data") => void;
   showSuggestions: boolean;

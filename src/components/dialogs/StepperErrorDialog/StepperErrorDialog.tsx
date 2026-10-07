@@ -16,11 +16,12 @@ const StepperErrorDialog = () => {
   const errorType = useGlobalStore((state) => state.errorType);
   const clearError = useGlobalStore((state) => state.clearError);
   const resetSteps = useGlobalStore((state) => state.resetSteps);
+  const setSearchActive = useGlobalStore((state) => state.setSearchActive);
 
   const handleStartOverClick = () => {
     resetSteps();
+    setSearchActive(false);
     toggleDialog(DIALOG_NAME);
-    toggleDialog("inputStepper", true);
 
     setTimeout(() => {
       clearError();

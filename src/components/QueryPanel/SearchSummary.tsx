@@ -8,17 +8,12 @@ import { Node } from "@/types/spotQuery";
 
 const propertyLabel = ({ name, operator, value }: ChatProperty) => {
   if (!value) return name;
-  if (operator === "<" || operator === ">") return `${name} ${operator} ${value}`;
+  if (operator === "<" || operator === ">")
+    return `${name} ${operator} ${value}`;
   return `${name} ${value}`;
 };
 
-const Pill = ({
-  color,
-  children,
-}: {
-  color?: string;
-  children: ReactNode;
-}) => (
+const Pill = ({ color, children }: { color?: string; children: ReactNode }) => (
   <span className="inline-flex items-center gap-1 px-2 py-0.5 mx-0.5 text-xs font-medium leading-tight bg-white border border-gray-300 rounded-full align-middle">
     {color && (
       <span
@@ -111,7 +106,7 @@ const SearchSummary = () => {
     );
 
   return (
-    <p className="p-2 text-sm leading-7 border rounded-md bg-gray-50">
+    <p className="p-2 text-sm border rounded-md bg-gray-50">
       Searching for{" "}
       {clauses.map((clause, i) => (
         <React.Fragment key={i}>

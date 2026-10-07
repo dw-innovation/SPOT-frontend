@@ -54,6 +54,8 @@ const useGlobalStore = create<GlobalStoreInterface>((set) => ({
     })),
   resetSteps: () => set({ currentStep: 0 }),
   goToStep: (name) => set({ currentStep: STEP_NAMES.indexOf(name) }),
+  searchActive: false,
+  setSearchActive: (searchActive) => set({ searchActive }),
   view: "map",
   setView: (view: "map" | "data") => set({ view }),
   initialize: (initialData) =>

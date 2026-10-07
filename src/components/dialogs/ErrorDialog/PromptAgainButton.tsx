@@ -11,6 +11,7 @@ const PromptAgainButton = () => {
   const toggleDialog = useGlobalStore((state) => state.toggleDialog);
   const clearError = useGlobalStore((state) => state.clearError);
   const resetSteps = useGlobalStore((state) => state.resetSteps);
+  const setSearchActive = useGlobalStore((state) => state.setSearchActive);
   const nextStep = useGlobalStore((state) => state.nextStep);
   const naturalLanguageSentence = useSpotQueryStore(
     (state) => state.naturalLanguageSentence
@@ -26,8 +27,8 @@ const PromptAgainButton = () => {
     setTimeout(() => {
       clearError();
       resetSteps();
-      toggleDialog("inputStepper", true);
       nextStep();
+      setSearchActive(true);
     }, 300);
   };
 

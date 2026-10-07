@@ -65,7 +65,7 @@ const ChatPanel = () => {
     (state) => state.setNaturaLanguageSentence
   );
   const goToStep = useGlobalStore((state) => state.goToStep);
-  const toggleDialog = useGlobalStore((state) => state.toggleDialog);
+  const setSearchActive = useGlobalStore((state) => state.setSearchActive);
 
   const [inputValue, setInputValue] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -110,7 +110,7 @@ const ChatPanel = () => {
           ? "areaSelector"
           : "mapQuery"
       );
-      toggleDialog("inputStepper", true);
+      setSearchActive(true);
     },
     onError: (e) => setError(e.message),
   });
