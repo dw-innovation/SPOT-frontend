@@ -16,7 +16,7 @@ const PromptInput = () => {
   );
   const resetSteps = useGlobalStore((state) => state.resetSteps);
   const nextStep = useGlobalStore((state) => state.nextStep);
-  const toggleDialog = useGlobalStore((state) => state.toggleDialog);
+  const setSearchActive = useGlobalStore((state) => state.setSearchActive);
 
   const [inputValue, setInputValue] = useState(naturalLanguageSentence);
 
@@ -28,7 +28,7 @@ const PromptInput = () => {
     if (inputValue !== "") {
       resetSteps();
       nextStep();
-      toggleDialog("inputStepper");
+      setSearchActive(true);
       trackAction("promptInput", "search", inputValue);
       setNaturaLanguageSentence(inputValue);
     }

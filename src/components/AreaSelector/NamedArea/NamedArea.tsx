@@ -29,6 +29,7 @@ const NamedArea = () => {
     (state) => state.setSearchAreaGeometry
   );
   const toggleDialog = useGlobalStore((state) => state.toggleDialog);
+  const setSearchActive = useGlobalStore((state) => state.setSearchActive);
 
   const queryKey = ["fetchAreas", detectedValue];
 
@@ -46,7 +47,7 @@ const NamedArea = () => {
   useEffect(() => {
     if (areaType === "bbox" || !suggestedAreas) return;
     if (suggestedAreas.length === 0) {
-      toggleDialog("inputStepper", false);
+      setSearchActive(false);
       setErrorType("noLocations");
       toggleDialog("error", true);
 

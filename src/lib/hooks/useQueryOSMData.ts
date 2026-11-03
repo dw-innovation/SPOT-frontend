@@ -1,6 +1,7 @@
 import { QueryKey, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 
+import useChatStore from "@/stores/useChatStore";
 import useGlobalStore from "@/stores/useGlobalStore";
 import useSpotQueryStore from "@/stores/useSpotQueryStore";
 
@@ -28,6 +29,7 @@ const useQueryOSMData = ({
   const spotQuery = useSpotQueryStore((state) => state.spotQuery);
   const setError = useGlobalStore((state) => state.setError);
   const toggleDialog = useGlobalStore((state) => state.toggleDialog);
+  const setNotice = useChatStore((state) => state.setNotice);
 
   const queryKey: QueryKey = ["osmData", JSON.stringify(spotQuery)];
 
@@ -54,12 +56,16 @@ const useQueryOSMData = ({
   useEffect(() => {
     if (!hasMounted.current) return;
     if (isSuccess && data) {
+      setResults(data);
       if (data.results.features.length === 0) {
-        setResults(data);
-        toggleDialog("error", true);
+        // Still reported through setError so it is tracked, but shown inline:
+        // an empty result set is a normal answer, not a reason to interrupt.
+        setNotice(
+          "No results in the search area. Try different wording, a larger area, or edit the search tags."
+        );
         setError("noResults");
       } else {
-        setResults(data);
+        setNotice(null);
       }
 
       if (onSuccessCallbacks) {
@@ -75,6 +81,7 @@ const useQueryOSMData = ({
   useEffect(() => {
     if (!hasMounted.current) return;
     if (isError && error) {
+      setNotice(null);
       setError(error.message || "", { stack: error.stack });
       toggleDialog("stepperError", true);
 
@@ -85,7 +92,6 @@ const useQueryOSMData = ({
           }
         });
       }
-      toggleDialog("inputStepper", false);
     }
   }, [isError, error]);
 

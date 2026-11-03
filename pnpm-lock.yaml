@@ -93,6 +93,9 @@ importers:
       next-auth:
         specifier: ^4.24.15
         version: 4.24.15(next@16.3.5(@babel/core@7.29.7)(@types/node@25.9.3)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      pluralize:
+        specifier: 8.0.0
+        version: 8.0.0
       pmtiles:
         specifier: 4.5.0
         version: 4.5.0
@@ -184,6 +187,9 @@ importers:
       '@types/node':
         specifier: 25.9.3
         version: 25.9.3
+      '@types/pluralize':
+        specifier: 0.0.33
+        version: 0.0.33
       '@types/react':
         specifier: 19.2.17
         version: 19.2.17
@@ -1815,6 +1821,9 @@ packages:
 
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
+
+  '@types/pluralize@0.0.33':
+    resolution: {integrity: sha512-JOqsl+ZoCpP4e8TDke9W79FDcSgPAR0l6pixx2JHkhnRjvShyYiAYw2LVsnA7K08Y6DeOnaU6ujmENO4os/cYg==}
 
   '@types/react-dom@19.2.3':
     resolution: {integrity: sha512-jp2L/eY6fn+KgVVQAOqYItbF0VY/YApe5Mz2F0aykSO8gx31bYCZyvSeYxCHKvzHG5eZjc+zyaS5BrBWya2+kQ==}
@@ -3911,6 +3920,10 @@ packages:
   picomatch@4.0.7:
     resolution: {integrity: sha512-qcJu88Q2IWqJsDD529JKMdwGm/dvInW4HvQnRwiH9JtihJvzGOscDtHE3x1pBKeUOTysQ8kVmLnJ2kJu7yhcGA==}
     engines: {node: '>=12'}
+
+  pluralize@8.0.0:
+    resolution: {integrity: sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==}
+    engines: {node: '>=4'}
 
   pmtiles@4.5.0:
     resolution: {integrity: sha512-CBeD4SoUluFziGdy/8k7FOjQxQy486n+929W/tWophauvMICpkZ26vGBWhDt/6b1FZQWNaf4jFdT/5+q0Wii5w==}
@@ -7455,6 +7468,8 @@ snapshots:
 
   '@types/parse-json@4.0.2': {}
 
+  '@types/pluralize@0.0.33': {}
+
   '@types/react-dom@19.2.3(@types/react@19.2.17)':
     dependencies:
       '@types/react': 19.2.17
@@ -9895,6 +9910,8 @@ snapshots:
   picomatch@2.3.2: {}
 
   picomatch@4.0.7: {}
+
+  pluralize@8.0.0: {}
 
   pmtiles@4.5.0:
     dependencies:
