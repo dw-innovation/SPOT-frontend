@@ -143,17 +143,20 @@ const ChatPanel = () => {
 
   return (
     <div className="flex flex-col flex-1 min-h-0 gap-2">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between shrink-0">
         <h3 className="text-lg font-semibold">Your search</h3>
         <Button variant="ghost" size="sm" onClick={startOver}>
           New search
         </Button>
       </div>
-      <SearchSummary />
-      <div
-        ref={listRef}
-        className="flex flex-col flex-1 min-h-0 gap-2 overflow-y-auto"
-      >
+      <div className="shrink-0">
+        <SearchSummary />
+      </div>
+      {/* min-h-full with justify-end keeps a short conversation sitting just
+          above the composer, the way a chat reads, while a long one still
+          scrolls from the top instead of being clipped. */}
+      <div ref={listRef} className="flex-1 min-h-0 -mx-1 overflow-y-auto px-1">
+        <div className="flex flex-col justify-end gap-2 min-h-full">
         {history.map((message, i) => (
           <Bubble key={i} message={message} />
         ))}
@@ -169,9 +172,10 @@ const ChatPanel = () => {
             </div>
           </>
         )}
+        </div>
       </div>
-      {error && <p className="text-sm text-red-600">{error}</p>}
-      <form className="flex items-end gap-2">
+      {error && <p className="text-sm text-red-600 shrink-0">{error}</p>}
+      <form className="flex items-end gap-2 pt-3 border-t shrink-0">
         <Textarea
           placeholder="Refine your search, e.g. “make it 200 m”"
           onChange={({ target: { value } }) => setInputValue(value)}

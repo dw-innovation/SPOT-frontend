@@ -37,6 +37,7 @@ const MapInterface = () => (
                 belongs to the query panel now that it spans the column. */}
             <div className="flex flex-col items-end gap-2">
               <MapControls />
+              <LayerSelector />
               <MapLegend />
             </div>
           </div>
@@ -44,11 +45,6 @@ const MapInterface = () => (
       </div>
     </div>
 
-    {/* Offset past the query panel, which now spans the full left column —
-        at left-0 this would sit underneath it and swallow its clicks. */}
-    <div className="absolute bottom-0 left-[20rem] z-[400] flex items-end gap-2 p-2">
-      <LayerSelector />
-    </div>
 
     <div className="absolute bottom-0 right-0 z-[400] p-2">
       <Footer />
