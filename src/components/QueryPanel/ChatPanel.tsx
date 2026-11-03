@@ -142,7 +142,7 @@ const ChatPanel = () => {
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col flex-1 min-h-0 gap-2">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">Your search</h3>
         <Button variant="ghost" size="sm" onClick={startOver}>
@@ -152,7 +152,7 @@ const ChatPanel = () => {
       <SearchSummary />
       <div
         ref={listRef}
-        className="flex flex-col gap-2 overflow-y-auto max-h-64"
+        className="flex flex-col flex-1 min-h-0 gap-2 overflow-y-auto"
       >
         {history.map((message, i) => (
           <Bubble key={i} message={message} />

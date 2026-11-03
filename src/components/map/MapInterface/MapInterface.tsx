@@ -12,7 +12,7 @@ import SearchCurrentViewButton from "@/components/SearchCurrentViewButton";
 
 const MapInterface = () => (
   <>
-    <div className="absolute top-0 left-0 z-[400] flex items-start justify-between !font-sans p-2">
+    <div className="absolute top-0 bottom-0 left-0 z-[400] flex items-stretch !font-sans p-2">
       <QueryPanel />
     </div>
 
@@ -33,17 +33,21 @@ const MapInterface = () => (
               <PolygonOutsideAlert />
               <ResultsOutsideAlert />
             </div>
-            <MapControls />
+            {/* The legend sits under the zoom slider; the bottom-left corner
+                belongs to the query panel now that it spans the column. */}
+            <div className="flex flex-col items-end gap-2">
+              <MapControls />
+              <MapLegend />
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div className="absolute bottom-0 left-0 z-[400] flex items-end gap-2 justify-between p-2">
-      <MapLegend />
-      <div className="flex gap-1">
-        <LayerSelector />
-      </div>
+    {/* Offset past the query panel, which now spans the full left column —
+        at left-0 this would sit underneath it and swallow its clicks. */}
+    <div className="absolute bottom-0 left-[20rem] z-[400] flex items-end gap-2 p-2">
+      <LayerSelector />
     </div>
 
     <div className="absolute bottom-0 right-0 z-[400] p-2">

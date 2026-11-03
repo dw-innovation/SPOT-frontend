@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 
 import useChatStore from "@/stores/useChatStore";
+import useGlobalStore from "@/stores/useGlobalStore";
 import useResultsStore from "@/stores/useResultsStore";
 import useSpotQueryStore from "@/stores/useSpotQueryStore";
 import { ChatProperty } from "@/types/chatQuery";
@@ -13,8 +14,21 @@ const propertyLabel = ({ name, operator, value }: ChatProperty) => {
   return `${name} ${value}`;
 };
 
-const Pill = ({ color, children }: { color?: string; children: ReactNode }) => (
-  <span className="inline-flex items-center gap-1 px-2 py-0.5 mx-0.5 text-xs font-medium leading-tight bg-white border border-gray-300 rounded-full align-middle">
+const Pill = ({
+  color,
+  onClick,
+  children,
+}: {
+  color?: string;
+  onClick?: () => void;
+  children: ReactNode;
+}) => (
+  <button
+    type="button"
+    onClick={onClick}
+    title="Edit the OSM tags for this entity"
+    className="inline-flex items-center gap-1 px-2 py-0.5 mx-0.5 text-xs font-medium leading-tight align-middle bg-white border border-gray-300 rounded-full cursor-pointer hover:border-gray-500 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+  >
     {color && (
       <span
         className="w-2 h-2 rounded-full shrink-0"
@@ -22,7 +36,7 @@ const Pill = ({ color, children }: { color?: string; children: ReactNode }) => (
       />
     )}
     {children}
-  </span>
+  </button>
 );
 
 const Value = ({ children }: { children: ReactNode }) => (
@@ -36,6 +50,15 @@ const SearchSummary = () => {
   const { nodes, edges, area } = useSpotQueryStore((state) => state.spotQuery);
   const chatQuery = useChatStore((state) => state.chatQuery);
   const sets = useResultsStore((state) => state.sets);
+  const toggleDialog = useGlobalStore((state) => state.toggleDialog);
+  const setDialogData = useGlobalStore((state) => state.setDialogData);
+
+  // The pills are the way into the tag editor now that the search parameters
+  // panel is gone.
+  const editEntity = (id: number) => {
+    setDialogData("entityEditor", { id });
+    toggleDialog("entityEditor", true);
+  };
 
   if (nodes.length === 0) return null;
 
@@ -60,7 +83,7 @@ const SearchSummary = () => {
         : []),
     ];
     return (
-      <Pill color={colorOf(node)}>
+      <Pill color={colorOf(node)} onClick={() => editEntity(node.id)}>
         <span className="capitalize">{node.display_name}</span>
         {details.length > 0 && (
           <span className="font-normal text-gray-500">

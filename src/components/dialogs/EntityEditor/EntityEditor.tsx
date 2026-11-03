@@ -16,8 +16,10 @@ const DIALOG_NAME = "entityEditor";
 const EntityEditor = () => {
   const dialogData = useGlobalStore((state) => state.dialogs.entityEditor.data);
 
-  const node = useSpotQueryStore(
-    (state) => state.spotQuery.nodes[dialogData?.id || 0]
+  // Look the node up by its id. This used to index the array by position,
+  // which only happened to work while ids ran 0,1,2… in order.
+  const node = useSpotQueryStore((state) =>
+    state.spotQuery.nodes.find((candidate) => candidate.id === dialogData?.id)
   );
 
   const filters = node ? node.filters : undefined;
