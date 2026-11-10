@@ -76,6 +76,9 @@ Copy `.env.example` to `.env.local` and fill it in, or pull the real values with
 | `NEXTAUTH_SECRET` | NextAuth signing secret. |
 | `NEXTAUTH_URL` | Canonical URL of the deployment (NextAuth). |
 | `CREDENTIALS` | Static test accounts, `"user1:pass1;user2:pass2"`. |
+| `MAIL_ACCOUNT` | From address of magic-link mails (e.g. `no-reply@findthatspot.io`). |
+| `MAIL_IMAP`, `MAIL_PORT` | Mail server host and SMTP port (465 = implicit TLS) used to send magic links. |
+| `MAIL_USERNAME`, `MAIL_PASSWORD` | Login of the mailbox that sends them. |
 | `APP_SALT` | Salt used to pseudonymise usernames before they reach the backends. |
 | `HTTP_BASIC_AUTH` | Optional `"user:pass"` basic-auth gate for the whole site (see `src/proxy.ts`). |
 

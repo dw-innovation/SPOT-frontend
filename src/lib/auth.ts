@@ -1,5 +1,9 @@
+import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import EmailProvider from "next-auth/providers/email";
+
+import mongoClientPromise from "./mongoClient";
 
 const parseEnvCredentials = (envCreds: string) => {
   const credsArray = envCreds.split(";").map((cred) => {
@@ -11,7 +15,24 @@ const parseEnvCredentials = (envCreds: string) => {
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
+  // The adapter is only used to store the one-time magic-link tokens (and the
+  // user record they create); sessions themselves stay JWT.
+  adapter: MongoDBAdapter(mongoClientPromise(), {
+    databaseName: process.env.MONGODB_DBNAME,
+  }),
   providers: [
+    EmailProvider({
+      server: {
+        host: process.env.MAIL_IMAP,
+        port: Number(process.env.MAIL_PORT || 465),
+        secure: Number(process.env.MAIL_PORT || 465) === 465,
+        auth: {
+          user: process.env.MAIL_USERNAME,
+          pass: process.env.MAIL_PASSWORD,
+        },
+      },
+      from: process.env.MAIL_ACCOUNT,
+    }),
     CredentialsProvider({
       name: "Credentials",
       credentials: {

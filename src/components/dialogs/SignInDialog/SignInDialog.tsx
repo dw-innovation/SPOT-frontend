@@ -13,6 +13,10 @@ const DIALOG_NAME = "signIn";
 const SignInDialog: React.FC = () => {
   const [userName, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [linkStatus, setLinkStatus] = useState<
+    "idle" | "sending" | "sent" | "error"
+  >("idle");
 
   const handleUserNameChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setUserName(e.target.value);
@@ -31,6 +35,17 @@ const SignInDialog: React.FC = () => {
     });
   };
 
+  const handleMagicLink = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+    setLinkStatus("sending");
+    const result = await signIn("email", {
+      email: email.trim(),
+      redirect: false,
+    });
+    setLinkStatus(result?.error ? "error" : "sent");
+  };
+
   return (
     <Dialog
       dialogName={DIALOG_NAME}
@@ -44,6 +59,42 @@ const SignInDialog: React.FC = () => {
             Geospatial search for OpenStreetMap
           </h2>
         </div>
+        <form onSubmit={handleMagicLink} className="flex w-full flex-col gap-2">
+          <Label className="text-gray-500 font-bold">Email</Label>
+          <Input
+            type="email"
+            name="email"
+            placeholder="you@example.com"
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setLinkStatus("idle");
+            }}
+            value={email}
+          />
+          <Button
+            type="submit"
+            disabled={linkStatus === "sending" || !email.trim()}
+          >
+            Email me a sign-in link
+          </Button>
+          {linkStatus === "sent" && (
+            <p className="text-sm text-green-700">
+              Check your inbox — the link is valid for 24 hours.
+            </p>
+          )}
+          {linkStatus === "error" && (
+            <p className="text-sm text-red-600">
+              The link could not be sent. Please try again.
+            </p>
+          )}
+        </form>
+
+        <div className="flex items-center justify-center my-4 w-full">
+          <div className="flex-grow border-t border-[1px] border-gray-300"></div>
+          <span className="mx-4 text-gray-500 font-bold">or</span>
+          <div className="flex-grow border-t border-[1px] border-gray-300"></div>
+        </div>
+
         <form onSubmit={handleSubmit} className="flex w-full flex-col gap-4">
           <div className="flex w-full flex-col gap-2">
             <Label className="text-gray-500 font-bold">Username</Label>
