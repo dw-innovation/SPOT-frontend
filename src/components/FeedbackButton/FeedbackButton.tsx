@@ -65,10 +65,13 @@ const FeedbackButton = () => {
 
   return (
     <div
-      className="flex items-center gap-1 hover:brighter font-noto fixed right-0 bottom-[12.5%] transition-all"
+      className="flex items-center gap-1 hover:brighter font-noto fixed right-0 top-1/2 transition-all"
       style={{
         transform: `translateX(${hover ? 0 : width}px)`,
         zIndex: 100000,
+        // Centred vertically, clear of the legend and layer selector that
+        // stack up from the bottom-right corner.
+        marginTop: `-${height / 2}px`,
       }}
       onMouseOver={() => setHover(true)}
       onMouseOut={() => setHover(false)}

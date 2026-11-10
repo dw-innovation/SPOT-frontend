@@ -33,20 +33,18 @@ const MapInterface = () => (
               <PolygonOutsideAlert />
               <ResultsOutsideAlert />
             </div>
-            {/* The legend sits under the zoom slider; the bottom-left corner
-                belongs to the query panel now that it spans the column. */}
-            <div className="flex flex-col items-end gap-2">
-              <MapControls />
-              <LayerSelector />
-              <MapLegend />
-            </div>
+            <MapControls />
           </div>
         </div>
       </div>
     </div>
 
 
-    <div className="absolute bottom-0 right-0 z-[400] p-2">
+    {/* The legend and layer selector stack above the footer; the bottom-left
+        corner belongs to the query panel now that it spans the column. */}
+    <div className="absolute bottom-0 right-0 z-[400] flex flex-col items-end gap-2 !font-sans p-2">
+      <LayerSelector />
+      <MapLegend />
       <Footer />
     </div>
   </>

@@ -5,7 +5,6 @@ import useDisableMapInteraction from "@/stores/useDisableMapInteraction";
 
 import ChatPanel from "./ChatPanel";
 import PromptInput from "./PromptInput";
-import SearchFlow from "./SearchFlow";
 
 const QueryPanel = () => {
   const panelRef = useRef<HTMLDivElement>(null);
@@ -18,9 +17,6 @@ const QueryPanel = () => {
           scrolls instead of pushing the composer off the bottom. */}
       <div className="flex flex-col flex-1 min-h-0 gap-4 p-2 overflow-hidden bg-white rounded-md shadow-lg cursor-auto">
         {isChatting ? <ChatPanel /> : <PromptInput />}
-        {/* Progress, area selection and "no results" all appear here, below
-            the conversation, rather than in a dialog over the map. */}
-        <SearchFlow />
       </div>
     </div>
   );

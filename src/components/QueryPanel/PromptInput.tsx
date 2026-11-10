@@ -7,12 +7,15 @@ import { cn, trackAction } from "@/lib/utils";
 import useGlobalStore from "@/stores/useGlobalStore";
 import useSpotQueryStore from "@/stores/useSpotQueryStore";
 
-// Short enough to read at a glance, and each one shows a different thing the
-// search can do: a chain of relations, a named place, a simple pair.
+import SearchFlow from "./SearchFlow";
+import SearchStatusBar from "./SearchStatusBar";
+
+// Small cities and towns on purpose: the search area is what drives how long
+// the OpenStreetMap query takes, and these still have plenty of matches.
 const EXAMPLES = [
-  "a tram stop next to a park within 150 m of a traffic light in Prague",
-  "a café called “club” within 150 m of a marina in The Hague",
-  "a bus station in front of a shopping mall in Yangon",
+  "a bike parking next to a train station in Delft",
+  "a playground within 200 m of a school in Heidelberg",
+  "a pharmacy next to a supermarket in Leiden",
 ];
 
 const PromptInput = () => {
@@ -57,7 +60,7 @@ const PromptInput = () => {
 
       {/* Fills the column with something useful rather than white space, and
           doubles as an explanation of what the search understands. */}
-      <div className="flex flex-col gap-2 overflow-y-auto">
+      <div className="flex flex-col flex-1 min-h-0 gap-2 overflow-y-auto">
         <p className="text-sm text-gray-500">
           Describe what you are looking for and how the places relate to each
           other. For example:
@@ -74,7 +77,11 @@ const PromptInput = () => {
         ))}
       </div>
 
-      <form className="flex flex-col gap-2 pt-3 mt-auto border-t shrink-0">
+      <div className="flex flex-col gap-2 shrink-0 empty:hidden">
+        <SearchFlow />
+        <SearchStatusBar />
+      </div>
+      <form className="flex flex-col gap-2 pt-3 border-t shrink-0">
         <Textarea
           placeholder="Describe your search…"
           onChange={({ target: { value } }) => setInputValue(value)}

@@ -3,7 +3,6 @@ import { SendHorizontalIcon } from "lucide-react";
 import React, { KeyboardEvent, useEffect, useRef, useState } from "react";
 import ReactMarkdown, { Components } from "react-markdown";
 
-import LoadingSpinner from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { fetchChatTurn, validateSpotQuery } from "@/lib/apiServices";
@@ -15,6 +14,8 @@ import useMapStore from "@/stores/useMapStore";
 import useSpotQueryStore from "@/stores/useSpotQueryStore";
 import { ChatMessage } from "@/types/chatQuery";
 
+import SearchFlow from "./SearchFlow";
+import SearchStatusBar from "./SearchStatusBar";
 import SearchSummary from "./SearchSummary";
 
 // Compact styles for the Markdown in assistant replies; the panel is narrow.
@@ -161,20 +162,15 @@ const ChatPanel = () => {
           <Bubble key={i} message={message} />
         ))}
         {isPending && variables && (
-          <>
-            <Bubble message={{ role: "user", content: variables.message }} />
-            <div
-              role="status"
-              aria-label="Working on your request"
-              className="self-start px-2 py-1.5 text-gray-500 bg-gray-100 rounded-md"
-            >
-              <LoadingSpinner size="1rem" />
-            </div>
-          </>
+          <Bubble message={{ role: "user", content: variables.message }} />
         )}
         </div>
       </div>
       {error && <p className="text-sm text-red-600 shrink-0">{error}</p>}
+      <div className="flex flex-col gap-2 shrink-0 empty:hidden">
+        <SearchFlow />
+        <SearchStatusBar />
+      </div>
       <form className="flex items-end gap-2 pt-3 border-t shrink-0">
         <Textarea
           placeholder="Refine your search, e.g. “make it 200 m”"
@@ -186,11 +182,12 @@ const ChatPanel = () => {
         <Button
           type="button"
           size="icon"
+          className="w-10 h-10 transition-transform rounded-full shadow-md shrink-0 hover:scale-105 active:scale-95 disabled:shadow-none"
           onClick={send}
           disabled={isPending || !inputValue.trim()}
           aria-label="Send"
         >
-          <SendHorizontalIcon className="w-4 h-4" />
+          <SendHorizontalIcon className="w-5 h-5" />
         </Button>
       </form>
     </div>

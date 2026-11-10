@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 import {
   fetchNLToSpotQueryTransformation,
@@ -9,8 +9,6 @@ import useChatStore from "@/stores/useChatStore";
 import useGlobalStore from "@/stores/useGlobalStore";
 import useMapStore from "@/stores/useMapStore";
 import useSpotQueryStore from "@/stores/useSpotQueryStore";
-
-import StepStatus from "../StepStatus";
 
 const NaturalLanguageTransformationStep = () => {
   const nextStep = useGlobalStore((state) => state.nextStep);
@@ -28,7 +26,7 @@ const NaturalLanguageTransformationStep = () => {
   const setChat = useChatStore((state) => state.setChat);
   const resetChat = useChatStore((state) => state.reset);
 
-  const { data, error, isSuccess, isError, isFetching } = useQuery({
+  const { data, error, isSuccess, isError } = useQuery({
     queryKey: ["transformNLToSpotQuery", naturalLanguageSentence],
     queryFn: () => fetchNLToSpotQueryTransformation(naturalLanguageSentence),
     enabled: !!naturalLanguageSentence,
@@ -95,9 +93,8 @@ const NaturalLanguageTransformationStep = () => {
     }
   }, [isError, error, setErrorType, toggleDialog, setSearchActive]);
 
-  if (!isFetching) return null;
-
-  return <StepStatus label="Analyzing your search…" />;
+  // Progress is shown by the status bar above the input.
+  return null;
 };
 
 export default NaturalLanguageTransformationStep;

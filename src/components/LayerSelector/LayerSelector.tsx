@@ -45,8 +45,8 @@ const LayerSelector = () => {
     LAYERS.map((_, index) => {
       return {
         transform: isOpen
-          ? `translateX(${(index + 1) * 15}%)`
-          : `translateX(-${(index + 1) * 100}%)`,
+          ? `translateX(-${(index + 1) * 15}%)`
+          : `translateX(${(index + 1) * 100}%)`,
         opacity: isOpen ? 1 : 0,
         height: "100%",
       };
@@ -58,7 +58,7 @@ const LayerSelector = () => {
   };
 
   return (
-    <div className={cn("relative flex items-end w-fit")}>
+    <div className={cn("relative flex flex-row-reverse items-end w-fit")}>
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger className="z-10" asChild>
@@ -76,7 +76,7 @@ const LayerSelector = () => {
         </Tooltip>
       </TooltipProvider>
 
-      <div className="z-0 flex items-end h-10">
+      <div className="z-0 flex flex-row-reverse items-end h-10">
         {springs.map((props, index) => (
           <animated.div key={LAYERS[index].value} style={props}>
             <LayerItem
