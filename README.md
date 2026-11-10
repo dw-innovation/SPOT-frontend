@@ -77,9 +77,6 @@ Copy `.env.example` to `.env.local` and fill it in, or pull the real values with
 | `NEXTAUTH_URL` | Canonical URL of the deployment (NextAuth). |
 | `CREDENTIALS` | Static test accounts, `"user1:pass1;user2:pass2"`. |
 | `APP_SALT` | Salt used to pseudonymise usernames before they reach the backends. |
-| `AZURE_AD_CLIENT_ID`, `AZURE_AD_CLIENT_SECRET`, `AZURE_AD_TENANT_ID` | Azure AD provider. |
-| `GITHUB_APP_CLIENT_ID`, `GITHUB_APP_CLIENT_SECRET` | GitHub provider. |
-| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | Google provider. |
 | `HTTP_BASIC_AUTH` | Optional `"user:pass"` basic-auth gate for the whole site (see `src/proxy.ts`). |
 
 ### Client (`NEXT_PUBLIC_*`, inlined at build time)
