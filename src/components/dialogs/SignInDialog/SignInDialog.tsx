@@ -15,7 +15,7 @@ const SignInDialog: React.FC = () => {
   const [password, setPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [linkStatus, setLinkStatus] = useState<
-    "idle" | "sending" | "sent" | "error"
+    "idle" | "sending" | "sent" | "error" | "denied"
   >("idle");
 
   const handleUserNameChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -43,7 +43,13 @@ const SignInDialog: React.FC = () => {
       email: email.trim(),
       redirect: false,
     });
-    setLinkStatus(result?.error ? "error" : "sent");
+    setLinkStatus(
+      !result?.error
+        ? "sent"
+        : result.error === "AccessDenied"
+          ? "denied"
+          : "error"
+    );
   };
 
   return (
@@ -80,6 +86,12 @@ const SignInDialog: React.FC = () => {
           {linkStatus === "sent" && (
             <p className="text-sm text-green-700">
               Check your inbox. The link is valid for 24 hours.
+            </p>
+          )}
+          {linkStatus === "denied" && (
+            <p className="text-sm text-red-600">
+              Sign-in links are only available for @dw.com and @dot.studio
+              addresses.
             </p>
           )}
           {linkStatus === "error" && (

@@ -13,6 +13,14 @@ const parseEnvCredentials = (envCreds: string) => {
   return credsArray;
 };
 
+// Magic links are limited to these domains for now.
+const ALLOWED_EMAIL_DOMAINS = ["dw.com", "dot.studio"];
+
+const isAllowedEmail = (email?: string | null) => {
+  const domain = email?.trim().toLowerCase().split("@").pop();
+  return !!domain && ALLOWED_EMAIL_DOMAINS.includes(domain);
+};
+
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   // The adapter is only used to store the one-time magic-link tokens (and the
@@ -66,6 +74,12 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+  callbacks: {
+    // Runs when a link is requested (so no mail goes to other addresses) and
+    // again when it is clicked. Credentials logins are unaffected.
+    signIn: ({ account, user }) =>
+      account?.provider !== "email" || isAllowedEmail(user.email),
+  },
   session: {
     strategy: "jwt",
   },
