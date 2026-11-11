@@ -75,11 +75,11 @@ const SignInDialog: React.FC = () => {
             type="submit"
             disabled={linkStatus === "sending" || !email.trim()}
           >
-            Email me a sign-in link
+            Send me a sign-in link
           </Button>
           {linkStatus === "sent" && (
             <p className="text-sm text-green-700">
-              Check your inbox — the link is valid for 24 hours.
+              Check your inbox. The link is valid for 24 hours.
             </p>
           )}
           {linkStatus === "error" && (
@@ -90,9 +90,9 @@ const SignInDialog: React.FC = () => {
         </form>
 
         <div className="flex items-center justify-center my-4 w-full">
-          <div className="flex-grow border-t border-[1px] border-gray-300"></div>
+          <div className="grow border-t border border-gray-300"></div>
           <span className="mx-4 text-gray-500 font-bold">or</span>
-          <div className="flex-grow border-t border-[1px] border-gray-300"></div>
+          <div className="grow border-t border border-gray-300"></div>
         </div>
 
         <form onSubmit={handleSubmit} className="flex w-full flex-col gap-4">
