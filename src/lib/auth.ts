@@ -75,6 +75,12 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    // Magic-link users have an email but no name, and the API routes identify
+    // users by session.user.name; fall back to the email for them.
+    jwt: ({ token }) => {
+      token.name ??= token.email;
+      return token;
+    },
     // Runs when a link is requested (so no mail goes to other addresses) and
     // again when it is clicked. Credentials logins are unaffected.
     signIn: ({ account, user }) =>
