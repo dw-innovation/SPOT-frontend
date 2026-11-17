@@ -5,6 +5,7 @@ import SpotLogo from "@/assets/icons/SpotLogo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import useGlobalStore from "@/stores/useGlobalStore";
 
 import Dialog from "../Dialog";
 
@@ -14,9 +15,10 @@ const SignInDialog: React.FC = () => {
   const [userName, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [code, setCode] = useState<string>("");
+  const toggleDialog = useGlobalStore((state) => state.toggleDialog);
+  const setDialogData = useGlobalStore((state) => state.setDialogData);
   const [linkStatus, setLinkStatus] = useState<
-    "idle" | "sending" | "sent" | "error" | "denied"
+    "idle" | "sending" | "error" | "denied"
   >("idle");
 
   const handleUserNameChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -36,20 +38,6 @@ const SignInDialog: React.FC = () => {
     });
   };
 
-  const handleCodeSubmit = (e: FormEvent<HTMLFormElement>): void => {
-    e.preventDefault();
-    const token = code.trim();
-    if (!token) return;
-    const params = new URLSearchParams({
-      email: email.trim().toLowerCase(),
-      token,
-      callbackUrl: window.location.href,
-    });
-    window.location.assign(
-      `${window.location.origin}/api/auth/callback/email?${params}`
-    );
-  };
-
   const handleSendCode = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!email.trim()) return;
@@ -58,13 +46,14 @@ const SignInDialog: React.FC = () => {
       email: email.trim(),
       redirect: false,
     });
-    setLinkStatus(
-      !result?.error
-        ? "sent"
-        : result.error === "AccessDenied"
-          ? "denied"
-          : "error"
-    );
+    if (!result?.error) {
+      setLinkStatus("idle");
+      setDialogData("signInCode", email.trim());
+      toggleDialog(DIALOG_NAME, false);
+      toggleDialog("signInCode", true);
+      return;
+    }
+    setLinkStatus(result.error === "AccessDenied" ? "denied" : "error");
   };
 
   return (
@@ -80,10 +69,7 @@ const SignInDialog: React.FC = () => {
             Geospatial search for OpenStreetMap
           </h2>
         </div>
-        <form
-          onSubmit={linkStatus === "sent" ? handleCodeSubmit : handleSendCode}
-          className="flex w-full flex-col gap-2"
-        >
+        <form onSubmit={handleSendCode} className="flex w-full flex-col gap-2">
           <Label className="text-gray-500 font-bold">Email</Label>
           <Input
             type="email"
@@ -92,38 +78,15 @@ const SignInDialog: React.FC = () => {
             onChange={(e) => {
               setEmail(e.target.value);
               setLinkStatus("idle");
-              setCode("");
             }}
             value={email}
           />
-          {linkStatus === "sent" ? (
-            <>
-              <p className="text-sm text-green-700">
-                Check your inbox. The code is valid for 10 minutes.
-              </p>
-              <Label className="text-gray-500 font-bold">Code</Label>
-              <Input
-                name="code"
-                inputMode="numeric"
-                autoComplete="one-time-code"
-                maxLength={6}
-                placeholder="123456"
-                autoFocus
-                onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-                value={code}
-              />
-              <Button type="submit" disabled={code.length !== 6}>
-                Sign in
-              </Button>
-            </>
-          ) : (
-            <Button
-              type="submit"
-              disabled={linkStatus === "sending" || !email.trim()}
-            >
-              Send me a sign-in code
-            </Button>
-          )}
+          <Button
+            type="submit"
+            disabled={linkStatus === "sending" || !email.trim()}
+          >
+            Send me a sign-in code
+          </Button>
           {linkStatus === "denied" && (
             <p className="text-sm text-red-600">
               Sign-in codes are not available for this email address yet.

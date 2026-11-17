@@ -13,6 +13,7 @@ export const DIALOG_NAMES = [
   "info",
   "entityEditor",
   "signIn",
+  "signInCode",
   "maintenance",
 ] as const;
 
@@ -22,6 +23,8 @@ export type DialogName = (typeof DIALOG_NAMES)[number];
 type DialogDataMap = {
   entityEditor: { id: number };
   info: string;
+  /** Email address the sign-in code was sent to. */
+  signInCode: string;
 };
 
 export type DialogWithData = keyof DialogDataMap;
