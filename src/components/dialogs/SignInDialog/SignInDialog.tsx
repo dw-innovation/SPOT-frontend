@@ -14,6 +14,7 @@ const SignInDialog: React.FC = () => {
   const [userName, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const [code, setCode] = useState<string>("");
   const [linkStatus, setLinkStatus] = useState<
     "idle" | "sending" | "sent" | "error" | "denied"
   >("idle");
@@ -35,7 +36,21 @@ const SignInDialog: React.FC = () => {
     });
   };
 
-  const handleMagicLink = async (e: FormEvent<HTMLFormElement>) => {
+  const handleCodeSubmit = (e: FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    const token = code.trim();
+    if (!token) return;
+    const params = new URLSearchParams({
+      email: email.trim().toLowerCase(),
+      token,
+      callbackUrl: window.location.href,
+    });
+    window.location.assign(
+      `${window.location.origin}/api/auth/callback/email?${params}`
+    );
+  };
+
+  const handleSendCode = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!email.trim()) return;
     setLinkStatus("sending");
@@ -65,7 +80,10 @@ const SignInDialog: React.FC = () => {
             Geospatial search for OpenStreetMap
           </h2>
         </div>
-        <form onSubmit={handleMagicLink} className="flex w-full flex-col gap-2">
+        <form
+          onSubmit={linkStatus === "sent" ? handleCodeSubmit : handleSendCode}
+          className="flex w-full flex-col gap-2"
+        >
           <Label className="text-gray-500 font-bold">Email</Label>
           <Input
             type="email"
@@ -74,29 +92,46 @@ const SignInDialog: React.FC = () => {
             onChange={(e) => {
               setEmail(e.target.value);
               setLinkStatus("idle");
+              setCode("");
             }}
             value={email}
           />
-          <Button
-            type="submit"
-            disabled={linkStatus === "sending" || !email.trim()}
-          >
-            Send me a sign-in link
-          </Button>
-          {linkStatus === "sent" && (
-            <p className="text-sm text-green-700">
-              Check your inbox. The link is valid for 24 hours.
-            </p>
+          {linkStatus === "sent" ? (
+            <>
+              <p className="text-sm text-green-700">
+                Check your inbox. The code is valid for 10 minutes.
+              </p>
+              <Label className="text-gray-500 font-bold">Code</Label>
+              <Input
+                name="code"
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                maxLength={6}
+                placeholder="123456"
+                autoFocus
+                onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
+                value={code}
+              />
+              <Button type="submit" disabled={code.length !== 6}>
+                Sign in
+              </Button>
+            </>
+          ) : (
+            <Button
+              type="submit"
+              disabled={linkStatus === "sending" || !email.trim()}
+            >
+              Send me a sign-in code
+            </Button>
           )}
           {linkStatus === "denied" && (
             <p className="text-sm text-red-600">
-              Sign-in links are only available for @dw.com and @dot.studio
-              addresses.
+              Sign-in codes are not available for this email address yet.
             </p>
           )}
           {linkStatus === "error" && (
             <p className="text-sm text-red-600">
-              The link could not be sent. Please try again.
+              The code could not be sent. Please try again.
             </p>
           )}
         </form>
